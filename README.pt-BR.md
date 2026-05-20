@@ -88,6 +88,5 @@ exa-research "estado atual da correção de erros quânticos"
 
 ---
 
-<div align="center">
-<sub>Construído sobre a <a href="https://exa.ai">Exa API</a> · Licença MIT</sub>
-</div>
+Built by [Nolan Vale](https://github.com/davidparker7966-design)  
+Part of **Nolan Vale Tools** — practical open-source utilities for search, automation, AI agents, and developer workflows.

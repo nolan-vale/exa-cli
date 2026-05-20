@@ -88,6 +88,5 @@ exa-research "양자 오류 수정의 현황"
 
 ---
 
-<div align="center">
-<sub><a href="https://exa.ai">Exa API</a> 기반 · MIT 라이선스</sub>
-</div>
+Built by [Nolan Vale](https://github.com/davidparker7966-design)  
+Part of **Nolan Vale Tools** — practical open-source utilities for search, automation, AI agents, and developer workflows.

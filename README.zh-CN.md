@@ -88,6 +88,5 @@ exa-research "量子纠错的现状"
 
 ---
 
-<div align="center">
-<sub>基于 <a href="https://exa.ai">Exa API</a> · MIT 许可证</sub>
-</div>
+Built by [Nolan Vale](https://github.com/davidparker7966-design)  
+Part of **Nolan Vale Tools** — practical open-source utilities for search, automation, AI agents, and developer workflows.

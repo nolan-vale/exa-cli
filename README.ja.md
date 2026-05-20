@@ -88,6 +88,5 @@ exa-research "量子エラー訂正の現状"
 
 ---
 
-<div align="center">
-<sub><a href="https://exa.ai">Exa API</a> 使用 · MIT ライセンス</sub>
-</div>
+Built by [Nolan Vale](https://github.com/davidparker7966-design)  
+Part of **Nolan Vale Tools** — practical open-source utilities for search, automation, AI agents, and developer workflows.
