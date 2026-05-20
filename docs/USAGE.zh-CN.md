@@ -5,7 +5,7 @@
 ## 安装
 
 ```bash
-uv tool install exa-cli
+uv tool install exa-search-cli
 ```
 
 ```bash

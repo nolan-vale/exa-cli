@@ -20,7 +20,7 @@
 
 **1단계 — 설치:**
 ```bash
-uv tool install exa-cli
+uv tool install exa-search-cli
 ```
 
 > `uv`가 없다면 `curl -LsSf https://astral.sh/uv/install.sh | sh`를 실행하거나, `pip install exa-search-cli`를 사용하세요.
