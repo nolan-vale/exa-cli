@@ -88,5 +88,5 @@ exa-research "量子エラー訂正の現状"
 
 ---
 
-Built by [Nolan Vale](https://github.com/davidparker7966-design)  
+Built by [Nolan Vale](https://github.com/nolan-vale)  
 Part of **Nolan Vale Tools** — practical open-source utilities for search, automation, AI agents, and developer workflows.

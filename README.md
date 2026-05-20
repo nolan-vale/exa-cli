@@ -21,7 +21,7 @@ CLI for [Exa](https://exa.ai) — neural web search, URL crawling, and AI deep r
 [![PyPI](https://img.shields.io/pypi/v/exa-cli?color=0ea5e9&label=PyPI)](https://pypi.org/project/exa-cli/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-0ea5e9.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
-[![Stars](https://img.shields.io/github/stars/davidparker7966-design/exa-cli?style=social)](https://github.com/davidparker7966-design/exa-cli)
+[![Stars](https://img.shields.io/github/stars/nolan-vale/exa-cli?style=social)](https://github.com/nolan-vale/exa-cli)
 
 </div>
 
@@ -165,5 +165,5 @@ See [AGENTS.md](AGENTS.md) for full schemas, exit codes, and environment referen
 
 ---
 
-Built by [Nolan Vale](https://github.com/davidparker7966-design)  
+Built by [Nolan Vale](https://github.com/nolan-vale)  
 Part of **Nolan Vale Tools** — practical open-source utilities for search, automation, AI agents, and developer workflows.

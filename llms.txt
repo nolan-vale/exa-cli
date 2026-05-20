@@ -39,8 +39,8 @@ exa-crawl returns: results[]{url, title, text}
 
 ## Links
 
-- GitHub: https://github.com/davidparker7966-design/exa-cli
+- GitHub: https://github.com/nolan-vale/exa-cli
 - PyPI: https://pypi.org/project/exa-cli/
 - Exa API docs: https://docs.exa.ai
-- Full CLI docs: https://github.com/davidparker7966-design/exa-cli/blob/main/docs/USAGE.md
-- For agents: https://github.com/davidparker7966-design/exa-cli/blob/main/AGENTS.md
+- Full CLI docs: https://github.com/nolan-vale/exa-cli/blob/main/docs/USAGE.md
+- For agents: https://github.com/nolan-vale/exa-cli/blob/main/AGENTS.md
