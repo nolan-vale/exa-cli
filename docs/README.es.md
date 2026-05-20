@@ -4,7 +4,7 @@
 
 # exa-cli
 
-**Búsqueda web neural para desarrolladores. Desde tu terminal.**
+**CLI para [Exa](https://exa.ai) — búsqueda web neural, crawling de URLs y tareas de investigación con IA, desde el terminal.**
 
 [![PyPI](https://img.shields.io/pypi/v/exa-cli?color=0ea5e9&label=PyPI)](https://pypi.org/project/exa-cli/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-0ea5e9.svg)](https://python.org)
@@ -14,51 +14,77 @@
 
 ---
 
-La búsqueda por palabras clave encuentra palabras. **Exa busca por significado.** `exa-cli` lleva ese poder directamente a tu shell — busca conceptos, extrae páginas y envía JSON limpio a tus scripts, agentes de IA y pipelines de investigación.
+`exa-cli` envuelve la [Exa API](https://exa.ai) en tres comandos de terminal. Exa busca por significado, no por palabras clave. Todos los comandos soportan `--json` para scripts, agentes de IA y pipelines.
 
-## ¿Por qué exa-cli?
+## Empieza en 60 segundos
 
-**Encuentra lo que la búsqueda por palabras clave no puede.**  
-La búsqueda neural entiende lo que buscas, no solo las palabras que escribiste.
-
-**Diseñado para la automatización desde el primer día.**  
-Cada comando soporta `--json`. Redirige a `jq`, agentes o scripts directamente.
-
-**Más que búsqueda.**  
-Encuentra páginas similares a cualquier URL, filtra por tipo de contenido, fecha y dominio, extrae texto completo con un solo comando.
-
-## Instalación
-
+**Paso 1 — Instala:**
 ```bash
 uv tool install exa-cli
 ```
 
+> ¿Sin `uv`? Ejecuta `curl -LsSf https://astral.sh/uv/install.sh | sh`, o usa `pip install exa-cli`.
+
+**Paso 2 — Obtén tu clave de API:**  
+Ve a [exa.ai](https://exa.ai) → regístrate (plan gratuito disponible) → Dashboard → API Keys.
+
+**Paso 3 — Configura la clave:**
 ```bash
-export EXA_API_KEY=tu-clave   # obtén una en exa.ai
+export EXA_API_KEY=tu-clave
+# Añade a ~/.zshrc o ~/.bashrc para que persista
 ```
+
+**Paso 4 — Busca:**
+```bash
+exa-search "cómo funcionan los transformers" --category "research paper"
+```
+
+## Comandos
+
+| Comando | Qué hace |
+|---|---|
+| `exa-search <consulta>` | Búsqueda web por significado. Filtros por tipo, fecha, dominio. Encuentra páginas similares. |
+| `exa-crawl <url>` | Extrae texto limpio de cualquier URL, sin HTML. |
+| `exa-research <tema>` | Tarea de investigación profunda. La IA lee la web y sintetiza una respuesta. |
+
+Todos los comandos aceptan `--json` para `jq`, scripts y agentes.
 
 ## Ejemplos
 
 ```bash
 # Encontrar páginas similares a una URL
-exa-search --similar https://docs.anthropic.com/en/api/getting-started
+exa-search --similar https://github.com/astral-sh/uv
 
-# Artículos de investigación sobre IA en 2025
-exa-search "transformer attention" --category "research paper" --start-date 2025-01-01
+# Artículos de investigación de IA de 2025
+exa-search "modelos de lenguaje visual" --category "research paper" --start-date 2025-01-01
 
-# Solo repositorios de GitHub, salida JSON
-exa-search "async rust runtime" --include-domain github.com --json | jq '.'
+# Solo repositorios de GitHub, lista de URLs
+exa-search "async rust runtime" --include-domain github.com --json | jq -r '.results[].url'
 
-# Extraer texto limpio de cualquier página
+# Texto limpio de cualquier página
 exa-crawl https://example.com -c 8000
 
 # Investigación profunda con IA
-exa-research "estado de los modelos de lenguaje visual en 2025"
+exa-research "estado actual de la corrección de errores cuánticos"
 ```
 
-## Documentación completa
+## Referencia de opciones
 
-→ **[USAGE.md](USAGE.md)**（EN）— todos los comandos, opciones y ejemplos de scripts.
+**`exa-search`**
+
+| Flag | Defecto | Descripción |
+|---|---|---|
+| `-n` / `--num-results` | `8` | Número de resultados |
+| `-t` / `--type` | `auto` | `auto` · `keyword` · `neural` |
+| `--category` | — | `news` · `tweet` · `github` · `research paper` · `pdf` etc. |
+| `--start-date` | — | Publicado en o después de `YYYY-MM-DD` |
+| `--end-date` | — | Publicado en o antes de `YYYY-MM-DD` |
+| `--include-domain` | — | Incluir solo estos dominios (separados por coma) |
+| `--exclude-domain` | — | Excluir estos dominios (separados por coma) |
+| `--similar` | — | Encontrar páginas similares a esta URL |
+| `--json` | off | Salida JSON en bruto |
+
+→ **[Documentación completa](USAGE.md)**（EN）
 
 ---
 

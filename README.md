@@ -3,9 +3,9 @@
 [中文](docs/README.zh-CN.md) · [Русский](docs/README.ru.md) · [Português](docs/README.pt-BR.md) · [Español](docs/README.es.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md)
 
 <!--
-  COVER IMAGE — generate with this prompt, save as docs/cover.png, then uncomment the line below.
+  COVER IMAGE — generate with this prompt, save as docs/cover.png, then uncomment the img tag below.
 
-  Prompt (Midjourney / DALL-E 3 / Stable Diffusion):
+  Prompt (Midjourney / DALL-E 3 / Stable Diffusion XL):
   "A sleek dark terminal window filled with glowing cyan and blue search results streaming
   in real-time, abstract neural network nodes forming a luminous web in the background,
   minimalist developer aesthetic, pure black background, neon accent colors,
@@ -16,7 +16,7 @@
 
 # exa-cli
 
-**Neural web search for developers. From your terminal.**
+**CLI for [Exa](https://exa.ai) — neural web search, URL crawling, and AI research tasks.**
 
 [![PyPI](https://img.shields.io/pypi/v/exa-cli?color=0ea5e9&label=PyPI)](https://pypi.org/project/exa-cli/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-0ea5e9.svg)](https://python.org)
@@ -27,51 +27,115 @@
 
 ---
 
-Keyword search matches words. **Exa searches by meaning.** `exa-cli` puts that power directly in your shell — find concepts, crawl pages, and pipe clean JSON into your scripts, AI agents, and research pipelines.
+`exa-cli` wraps the [Exa API](https://exa.ai) in three terminal commands. Exa searches by meaning, not keywords — it understands what you're looking for, not just what you typed. Every command outputs clean `--json` for scripting, agents, and pipelines.
 
-## Why exa-cli?
+## Start in 60 seconds
 
-**Find what keyword search misses.**  
-Neural search understands what you're looking for, not just the words you typed. Ask for concepts, topics, or vibes — Exa gets it.
-
-**Built for automation from day one.**  
-Every command outputs clean `--json`. Pipe into `jq`, pass to agents, feed into scripts. No scraping, no parsing HTML — just structured data.
-
-**More than search.**  
-Find pages similar to any URL. Filter by content type (`news`, `github`, `research paper`, `tweet`…), date range, or domain. Crawl full page text in one command.
-
-## Install
-
+**Step 1 — Install:**
 ```bash
 uv tool install exa-cli
 ```
 
+> No `uv`? Run `curl -LsSf https://astral.sh/uv/install.sh | sh` first, or use `pip install exa-cli`.
+
+**Step 2 — Get your API key:**  
+Go to [exa.ai](https://exa.ai) → sign up (free tier available) → Dashboard → API Keys.
+
+**Step 3 — Set the key:**
 ```bash
-export EXA_API_KEY=your-key   # get yours at exa.ai
+export EXA_API_KEY=your-key-here
+# Add to ~/.zshrc or ~/.bashrc to persist it
 ```
 
-## See it in action
+**Step 4 — Search:**
+```bash
+exa-search "how do transformers work" --category "research paper"
+```
+
+Done. You're searching the web with neural search.
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `exa-search <query>` | Search the web by meaning. Filter by type, date, domain. Find similar pages to any URL. |
+| `exa-crawl <url>` | Fetch clean readable text from any URL. |
+| `exa-research <topic>` | Submit a deep research task. Exa AI reads the web and synthesizes an answer. |
+
+All commands accept `--json` for structured output (use with `jq` or pipe to AI agents).
+
+## Examples
 
 ```bash
-# Find pages similar to any URL
-exa-search --similar https://docs.anthropic.com/en/api/getting-started
+# Find pages similar to any URL — great for competitive research
+exa-search --similar https://github.com/astral-sh/uv
 
-# Latest AI research papers, structured output
-exa-search "transformer attention" --category "research paper" --start-date 2025-01-01
+# AI/ML research papers from 2025 only
+exa-search "vision language models" --category "research paper" --start-date 2025-01-01
 
-# Only GitHub repos, pipe to jq
-exa-search "async rust runtime" --include-domain github.com --json | jq '.[].url'
+# Only GitHub repos, get URLs as JSON list
+exa-search "async rust runtime" --include-domain github.com --json | jq -r '.results[].url'
 
-# Crawl any page, get clean text
+# Crawl any page, get clean text (no HTML)
 exa-crawl https://example.com -c 8000
 
-# Deep AI research on a topic
-exa-research "state of vision language models 2025"
+# Deep research — Exa reads the web and writes a summary
+exa-research "what is the current state of quantum error correction"
+
+# Exclude noisy domains
+exa-search "python tutorial" --exclude-domain medium.com,dev.to
 ```
 
-## Full documentation
+## Options reference
 
-→ **[docs/USAGE.md](docs/USAGE.md)** — all commands, flags, piping recipes, and scripting examples.
+**`exa-search`**
+
+```
+exa-search <query> [--similar <url>] [options]
+```
+
+| Flag | Default | Description |
+|---|---|---|
+| `-n` / `--num-results` | `8` | Number of results to return |
+| `-t` / `--type` | `auto` | `auto` · `keyword` · `neural` |
+| `--text` | off | Fetch and print full page text |
+| `--category` | — | `news` · `tweet` · `github` · `paper` · `company` · `research paper` · `financial report` · `personal site` · `pdf` · `linkedin profile` |
+| `--start-date` | — | Published on or after `YYYY-MM-DD` |
+| `--end-date` | — | Published on or before `YYYY-MM-DD` |
+| `--include-domain` | — | Comma-separated domains to include only |
+| `--exclude-domain` | — | Comma-separated domains to exclude |
+| `--similar` | — | Find pages similar to this URL (replaces query) |
+| `--json` | off | Raw JSON output |
+
+**`exa-crawl`**
+
+| Flag | Default | Description |
+|---|---|---|
+| `-c` / `--max-chars` | `5000` | Max characters to return |
+| `--json` | off | Raw JSON output |
+
+**`exa-research`**
+
+| Flag | Default | Description |
+|---|---|---|
+| `-m` / `--model` | `exa-research` | `exa-research` or `exa-research-pro` |
+| `--json` | off | Raw JSON output |
+
+## For AI agents and scripts
+
+`exa-cli` is designed to be called by AI coding assistants (Claude Code, Codex, Cursor, etc.). All commands are stateless, read-only, and exit cleanly.
+
+```bash
+# Agent-friendly pattern: search → extract URLs → crawl first result
+exa-search "pytorch getting started" --json \
+  | jq -r '.results[0].url' \
+  | xargs exa-crawl -c 6000
+
+# Feed results directly to an AI context
+exa-search "topic" --json | jq '.results[] | {url, title}'
+```
+
+→ **[Full documentation](docs/USAGE.md)** — all flags, scripting recipes, and advanced usage.
 
 ---
 

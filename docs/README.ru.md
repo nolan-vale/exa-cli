@@ -4,7 +4,7 @@
 
 # exa-cli
 
-**Нейронный поиск для разработчиков. Прямо из терминала.**
+**CLI для [Exa](https://exa.ai) — нейронный поиск, краулинг URL и AI-исследования из терминала.**
 
 [![PyPI](https://img.shields.io/pypi/v/exa-cli?color=0ea5e9&label=PyPI)](https://pypi.org/project/exa-cli/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-0ea5e9.svg)](https://python.org)
@@ -14,51 +14,77 @@
 
 ---
 
-Ключевые слова ищут буквы. **Exa ищет смысл.** `exa-cli` переносит эту возможность прямо в терминал — ищи концепции, сканируй страницы, передавай чистый JSON в скрипты, AI-агенты и исследовательские пайплайны.
+`exa-cli` оборачивает [Exa API](https://exa.ai) в три команды терминала. Exa ищет по смыслу, а не по ключевым словам. Все команды поддерживают `--json` для скриптов, AI-агентов и пайплайнов.
 
-## Зачем exa-cli?
+## Запустить за 60 секунд
 
-**Находит то, что ключевые слова не найдут.**  
-Нейронный поиск понимает смысл запроса, а не просто слова. Ищи по концепциям — Exa поймёт.
-
-**Создан для автоматизации с первого дня.**  
-Каждая команда поддерживает `--json`. Передавай в `jq`, агентов или скрипты напрямую.
-
-**Больше чем поиск.**  
-Находи похожие страницы по URL, фильтруй по типу контента, датам и доменам, получай полный текст страницы одной командой.
-
-## Установка
-
+**Шаг 1 — Установка:**
 ```bash
 uv tool install exa-cli
 ```
 
+> Нет `uv`? Запусти `curl -LsSf https://astral.sh/uv/install.sh | sh`, или используй `pip install exa-cli`.
+
+**Шаг 2 — Получи API-ключ:**  
+Зайди на [exa.ai](https://exa.ai) → зарегистрируйся (есть бесплатный тариф) → Dashboard → API Keys.
+
+**Шаг 3 — Укажи ключ:**
 ```bash
-export EXA_API_KEY=твой-ключ   # получить на exa.ai
+export EXA_API_KEY=твой-ключ
+# Добавь в ~/.zshrc или ~/.bashrc чтобы не вводить каждый раз
 ```
+
+**Шаг 4 — Поиск:**
+```bash
+exa-search "как работают трансформеры" --category "research paper"
+```
+
+## Команды
+
+| Команда | Что делает |
+|---|---|
+| `exa-search <запрос>` | Веб-поиск по смыслу. Фильтры по типу, дате, домену. Поиск похожих страниц. |
+| `exa-crawl <url>` | Чистый текст любой страницы без HTML. |
+| `exa-research <тема>` | Задача глубокого исследования. Exa AI читает сеть и пишет синтез. |
+
+Все команды принимают `--json` — для `jq`, скриптов и агентов.
 
 ## Примеры
 
 ```bash
 # Найти похожие страницы по URL
-exa-search --similar https://docs.anthropic.com/en/api/getting-started
+exa-search --similar https://github.com/astral-sh/uv
 
-# Последние AI-статьи 2025 года
-exa-search "transformer attention" --category "research paper" --start-date 2025-01-01
+# Исследовательские статьи 2025 года
+exa-search "vision language models" --category "research paper" --start-date 2025-01-01
 
-# Только GitHub-репозитории, вывод JSON
-exa-search "async rust runtime" --include-domain github.com --json | jq '.'
+# Только GitHub-репозитории, список URL
+exa-search "async rust runtime" --include-domain github.com --json | jq -r '.results[].url'
 
-# Получить чистый текст любой страницы
+# Получить текст страницы без HTML
 exa-crawl https://example.com -c 8000
 
 # Глубокое AI-исследование темы
-exa-research "состояние vision language models 2025"
+exa-research "текущее состояние квантовой коррекции ошибок"
 ```
 
-## Полная документация
+## Параметры
 
-→ **[USAGE.md](USAGE.md)**（EN）— все команды, флаги и примеры.
+**`exa-search`**
+
+| Флаг | По умолчанию | Описание |
+|---|---|---|
+| `-n` / `--num-results` | `8` | Количество результатов |
+| `-t` / `--type` | `auto` | `auto` · `keyword` · `neural` |
+| `--category` | — | `news` · `tweet` · `github` · `research paper` · `pdf` и др. |
+| `--start-date` | — | Опубликовано после `YYYY-MM-DD` |
+| `--end-date` | — | Опубликовано до `YYYY-MM-DD` |
+| `--include-domain` | — | Только эти домены (через запятую) |
+| `--exclude-domain` | — | Исключить эти домены (через запятую) |
+| `--similar` | — | Найти похожие страницы по URL |
+| `--json` | off | Сырой JSON-вывод |
+
+→ **[Полная документация](USAGE.md)**（EN）
 
 ---
 

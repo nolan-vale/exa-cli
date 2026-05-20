@@ -4,7 +4,7 @@
 
 # exa-cli
 
-**개발자를 위한 뉴럴 웹 검색. 터미널에서 바로.**
+**[Exa](https://exa.ai) CLI — 뉴럴 웹 검색, URL 크롤링, AI 리서치를 터미널에서.**
 
 [![PyPI](https://img.shields.io/pypi/v/exa-cli?color=0ea5e9&label=PyPI)](https://pypi.org/project/exa-cli/)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-0ea5e9.svg)](https://python.org)
@@ -14,51 +14,77 @@
 
 ---
 
-키워드 검색은 단어를 찾습니다. **Exa는 의미를 검색합니다.** `exa-cli`는 그 능력을 터미널로 직접 가져옵니다 — 개념을 검색하고, 페이지를 크롤링하고, 깔끔한 JSON을 스크립트, AI 에이전트, 연구 파이프라인으로 전달하세요.
+`exa-cli`는 [Exa API](https://exa.ai)를 세 개의 터미널 명령어로 감쌉니다. Exa는 키워드가 아닌 의미로 검색합니다. 모든 명령어는 스크립트, AI 에이전트, 파이프라인을 위한 `--json` 출력을 지원합니다.
 
-## 왜 exa-cli인가?
+## 60초 시작 가이드
 
-**키워드 검색이 찾지 못하는 것을 찾아드립니다.**  
-뉴럴 검색은 입력한 단어뿐만 아니라 의도를 이해합니다.
-
-**처음부터 자동화를 위해 설계되었습니다.**  
-모든 명령은 `--json` 출력을 지원합니다. `jq`, 에이전트, 스크립트에 바로 전달하세요.
-
-**검색 그 이상.**  
-어떤 URL과도 유사한 페이지를 찾고, 콘텐츠 유형·날짜·도메인으로 필터링하고, 한 명령으로 전체 페이지 텍스트를 가져오세요.
-
-## 설치
-
+**1단계 — 설치:**
 ```bash
 uv tool install exa-cli
 ```
 
+> `uv`가 없다면 `curl -LsSf https://astral.sh/uv/install.sh | sh`를 실행하거나, `pip install exa-cli`를 사용하세요.
+
+**2단계 — API 키 발급:**  
+[exa.ai](https://exa.ai) → 회원가입 (무료 플랜 있음) → Dashboard → API Keys.
+
+**3단계 — 키 설정:**
 ```bash
-export EXA_API_KEY=당신의-키   # exa.ai에서 발급
+export EXA_API_KEY=발급받은-키
+# ~/.zshrc 또는 ~/.bashrc에 추가하면 영구 적용됩니다
 ```
+
+**4단계 — 검색:**
+```bash
+exa-search "트랜스포머 작동 원리" --category "research paper"
+```
+
+## 명령어
+
+| 명령어 | 기능 |
+|---|---|
+| `exa-search <쿼리>` | 의미 기반 웹 검색. 타입·날짜·도메인 필터링. 유사 페이지 검색. |
+| `exa-crawl <url>` | 어떤 URL에서도 깔끔한 텍스트 추출 (HTML 없음). |
+| `exa-research <주제>` | 심층 리서치 태스크. Exa AI가 웹을 읽고 답변을 합성. |
+
+모든 명령어는 `--json` 지원 (`jq`, 스크립트, AI 에이전트와 연동 가능).
 
 ## 예시
 
 ```bash
 # 어떤 URL과 유사한 페이지 찾기
-exa-search --similar https://docs.anthropic.com/en/api/getting-started
+exa-search --similar https://github.com/astral-sh/uv
 
-# 2025년 최신 AI 연구 논문
-exa-search "transformer attention" --category "research paper" --start-date 2025-01-01
+# 2025년 AI 연구 논문
+exa-search "비전 언어 모델" --category "research paper" --start-date 2025-01-01
 
-# GitHub 저장소만, JSON 출력
-exa-search "async rust runtime" --include-domain github.com --json | jq '.'
+# GitHub 저장소만, URL 목록 추출
+exa-search "async rust runtime" --include-domain github.com --json | jq -r '.results[].url'
 
 # 어떤 페이지든 깔끔한 텍스트 추출
 exa-crawl https://example.com -c 8000
 
-# AI 심층 연구
-exa-research "2025년 비전 언어 모델 현황"
+# AI 심층 리서치
+exa-research "양자 오류 수정의 현황"
 ```
 
-## 전체 문서
+## 옵션 레퍼런스
 
-→ **[USAGE.md](USAGE.md)**（영어）— 모든 명령어, 옵션, 스크립트 예시.
+**`exa-search`**
+
+| 플래그 | 기본값 | 설명 |
+|---|---|---|
+| `-n` / `--num-results` | `8` | 반환할 결과 수 |
+| `-t` / `--type` | `auto` | `auto` · `keyword` · `neural` |
+| `--category` | — | `news` · `tweet` · `github` · `research paper` · `pdf` 등 |
+| `--start-date` | — | 이 날짜 이후 게시 `YYYY-MM-DD` |
+| `--end-date` | — | 이 날짜 이전 게시 `YYYY-MM-DD` |
+| `--include-domain` | — | 이 도메인만 포함 (쉼표 구분) |
+| `--exclude-domain` | — | 이 도메인 제외 (쉼표 구분) |
+| `--similar` | — | 이 URL과 유사한 페이지 검색 |
+| `--json` | off | 원시 JSON 출력 |
+
+→ **[전체 문서](USAGE.md)**（영어）
 
 ---
 
