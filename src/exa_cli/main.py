@@ -215,7 +215,7 @@ def research() -> None:
     else:
         task_id = getattr(result, "id", None) or getattr(result, "task_id", str(result))
         status = getattr(result, "status", "submitted")
-        print(f"Research task created")
+        print("Research task created")
         print(f"  ID:     {task_id}")
         print(f"  Model:  {args.model}")
         print(f"  Status: {status}")
