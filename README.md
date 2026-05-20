@@ -1,121 +1,80 @@
+<div align="center">
+
+[中文](docs/README.zh-CN.md) · [Русский](docs/README.ru.md) · [Português](docs/README.pt-BR.md) · [Español](docs/README.es.md) · [日本語](docs/README.ja.md) · [한국어](docs/README.ko.md)
+
+<!--
+  COVER IMAGE — generate with this prompt, save as docs/cover.png, then uncomment the line below.
+
+  Prompt (Midjourney / DALL-E 3 / Stable Diffusion):
+  "A sleek dark terminal window filled with glowing cyan and blue search results streaming
+  in real-time, abstract neural network nodes forming a luminous web in the background,
+  minimalist developer aesthetic, pure black background, neon accent colors,
+  wide cinematic banner, 2:1 aspect ratio, no text, no UI chrome"
+
+  <img src="docs/cover.png" alt="exa-cli" width="100%">
+-->
+
 # exa-cli
 
-Command-line interface for [Exa](https://exa.ai) — the web search API built for AI applications.
+**Neural web search for developers. From your terminal.**
 
-Three commands: **search**, **crawl**, **research**.
+[![PyPI](https://img.shields.io/pypi/v/exa-cli?color=0ea5e9&label=PyPI)](https://pypi.org/project/exa-cli/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-0ea5e9.svg)](https://python.org)
+[![License: MIT](https://img.shields.io/badge/license-MIT-0ea5e9.svg)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/davidparker7966-design/exa-cli?style=social)](https://github.com/davidparker7966-design/exa-cli)
+
+</div>
+
+---
+
+Keyword search matches words. **Exa searches by meaning.** `exa-cli` puts that power directly in your shell — find concepts, crawl pages, and pipe clean JSON into your scripts, AI agents, and research pipelines.
+
+## Why exa-cli?
+
+**Find what keyword search misses.**  
+Neural search understands what you're looking for, not just the words you typed. Ask for concepts, topics, or vibes — Exa gets it.
+
+**Built for automation from day one.**  
+Every command outputs clean `--json`. Pipe into `jq`, pass to agents, feed into scripts. No scraping, no parsing HTML — just structured data.
+
+**More than search.**  
+Find pages similar to any URL. Filter by content type (`news`, `github`, `research paper`, `tweet`…), date range, or domain. Crawl full page text in one command.
 
 ## Install
 
 ```bash
-# Recommended: uv tool (isolated, no venv needed)
 uv tool install exa-cli
-
-# Or pip
-pip install exa-cli
 ```
-
-## Setup
-
-Get your API key at [exa.ai](https://exa.ai) and export it:
 
 ```bash
-export EXA_API_KEY=your-key-here
+export EXA_API_KEY=your-key   # get yours at exa.ai
 ```
 
-Add to `~/.zshrc` or `~/.bashrc` to persist.
-
-## Commands
-
-### exa-search
+## See it in action
 
 ```bash
-# Basic search
-exa-search "python async frameworks"
+# Find pages similar to any URL
+exa-search --similar https://docs.anthropic.com/en/api/getting-started
 
-# Limit results
-exa-search "rust web" -n 5
+# Latest AI research papers, structured output
+exa-search "transformer attention" --category "research paper" --start-date 2025-01-01
 
-# Filter by content type
-exa-search "latest AI papers" --category "research paper"
-exa-search "AI startup news" --category news --start-date 2024-01-01
+# Only GitHub repos, pipe to jq
+exa-search "async rust runtime" --include-domain github.com --json | jq '.[].url'
 
-# Domain filters
-exa-search "documentation" --include-domain docs.python.org,docs.rs
-exa-search "tutorials" --exclude-domain medium.com,dev.to
+# Crawl any page, get clean text
+exa-crawl https://example.com -c 8000
 
-# Find similar pages
-exa-search --similar https://github.com/astral-sh/uv
-
-# Fetch full page text
-exa-search "transformer architecture" --text
-
-# JSON output (for pipelines / jq)
-exa-search "query" --json | jq '.'
+# Deep AI research on a topic
+exa-research "state of vision language models 2025"
 ```
 
-**Options:**
+## Full documentation
 
-| Flag | Default | Description |
-|---|---|---|
-| `-n` / `--num-results` | 8 | Number of results |
-| `-t` / `--type` | `auto` | Search type: `auto`, `keyword`, `neural` |
-| `--text` | off | Fetch and show full page text |
-| `--category` | — | Content type filter (see below) |
-| `--start-date` | — | Published on or after `YYYY-MM-DD` |
-| `--end-date` | — | Published on or before `YYYY-MM-DD` |
-| `--include-domain` | — | Comma-separated domains to include |
-| `--exclude-domain` | — | Comma-separated domains to exclude |
-| `--similar` | — | Find pages similar to this URL |
-| `--json` | off | Raw JSON output |
+→ **[docs/USAGE.md](docs/USAGE.md)** — all commands, flags, piping recipes, and scripting examples.
 
-**Categories:** `news`, `tweet`, `github`, `paper`, `company`, `research paper`, `financial report`, `personal site`, `pdf`, `linkedin profile`
+---
 
-### exa-crawl
-
-Extract full content from a URL:
-
-```bash
-exa-crawl https://example.com
-exa-crawl https://arxiv.org/abs/2303.08774 -c 10000
-exa-crawl https://example.com --json
-```
-
-| Flag | Default | Description |
-|---|---|---|
-| `-c` / `--max-chars` | 5000 | Max characters to return |
-| `--json` | off | Raw JSON output |
-
-### exa-research
-
-AI-powered deep research task:
-
-```bash
-exa-research "explain transformer attention mechanisms"
-exa-research "quantum computing current state" --model exa-research-pro
-exa-research "topic" --json
-```
-
-| Flag | Default | Description |
-|---|---|---|
-| `-m` / `--model` | `exa-research` | Model: `exa-research` or `exa-research-pro` |
-| `--json` | off | Raw JSON output |
-
-## Piping and scripting
-
-```bash
-# Extract URLs from search results
-exa-search "rust async runtimes" --json | jq -r '.results[].url'
-
-# Crawl multiple URLs from a list
-cat urls.txt | xargs -I{} exa-crawl {}
-
-# Search + crawl pipeline
-exa-search "pytorch tutorial" --json \
-  | jq -r '.results[0].url' \
-  | xargs exa-crawl -c 8000
-```
-
-## Requirements
-
-- Python 3.11+
-- `EXA_API_KEY` environment variable
+<div align="center">
+<sub>Built on the <a href="https://exa.ai">Exa API</a> · MIT License · <a href="https://github.com/davidparker7966-design/exa-cli/issues">Report an issue</a></sub>
+</div>
