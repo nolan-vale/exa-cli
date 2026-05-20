@@ -33,9 +33,9 @@ dependencies = ["exa-py>=1.0.0"]
 dev = ["ruff>=0.4"]
 
 [project.urls]
-Homepage = "https://github.com/nolan-vale/exa-cli"
-Repository = "https://github.com/nolan-vale/exa-cli"
-Issues = "https://github.com/nolan-vale/exa-cli/issues"
+Homepage = "https://github.com/nolan-vale/exa-search-cli"
+Repository = "https://github.com/nolan-vale/exa-search-cli"
+Issues = "https://github.com/nolan-vale/exa-search-cli/issues"
 
 [project.scripts]
 exa-search   = "exa_cli.main:search"
